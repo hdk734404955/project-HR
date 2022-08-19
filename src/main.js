@@ -11,7 +11,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-
+import * as directives from '@/directives'
 import '@/icons' // icon
 import '@/permission' // permission control
 
@@ -34,7 +34,10 @@ Vue.use(ElementUI, {
 })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
-
+Object.keys(directives).forEach(key => {
+  // 注册自定义指令
+  Vue.directive(key, directives[key])
+})
 Vue.config.productionTip = false
 
 new Vue({
