@@ -38,7 +38,7 @@ service.interceptors.response.use(response => {
     status,
     message
   } = response.data
-  console.log(data, 'res.data')
+  console.log(data, '响应拦截器返回信息')
   if (status == 0) {
     return data
   } else {

@@ -2,6 +2,7 @@
   <div class="dashboard-container">
     <div class="app-container">
       <h2>个人中心</h2>
+      <h3>个人中心</h3>
     </div>
   </div>
 </template>

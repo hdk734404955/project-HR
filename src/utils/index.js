@@ -45,7 +45,9 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -114,4 +116,18 @@ export function param2Obj(url) {
     }
   })
   return obj
+}
+//转化为树形数据,递归算法
+export function toTree(list, value) {
+  let arr = []
+  list.forEach(item => {
+    if (item.pid === value) {
+      const children = toTree(list, item.id)
+      if (children.length) {
+        item.children = children
+      }
+      arr.push(item) //将内容加入到数组中
+    }
+  })
+  return arr
 }
