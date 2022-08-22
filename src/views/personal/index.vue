@@ -1,15 +1,9 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <h2>个人中心</h2>
-      <h3>个人中心</h3>
+      <el-card>
+        <p>个人中心</p>
+      </el-card>
     </div>
   </div>
 </template>
-
-<script>
-export default {};
-</script>
-
-<style>
-</style>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import personal from './modules/personal'
 import departments from './modules/departments'
+import setting from './modules/setting'
 
 Vue.use(Router)
 
@@ -69,7 +70,8 @@ export const constantRoutes = [{
 //创建动态路由
 export const asyncRoutes = [
   departments,
-  personal
+  personal,
+  setting,
 ]
 const createRouter = () => new Router({
   // mode: 'history', // require service support
