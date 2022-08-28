@@ -19,9 +19,21 @@ router.beforeEach(async (to, from, next) => {
       //如果当前vuex中用户有id就不用获取了
       if (!store.getters.userId) {
         await store.dispatch('user/getInfo')
-
+        const arr = await store.dispatch('user/getMens')
+        //筛选用户可用路由
+        const routers = await store.dispatch('permission/filterRouters', arr)
+        // console.log(routers, '66666');
+        //routers就是筛选得到的动态路由
+        router.addRoutes([...routers, {
+          path: '*',
+          redirect: '/404',
+          hidden: true
+        }]) //添加动态路由到路由表
+        next(to.path)
+      } else {
+        next()
       }
-      next()
+
     }
   } else {
     //没有token

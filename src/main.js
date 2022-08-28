@@ -11,10 +11,12 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-import * as directives from '@/directives'
+import * as directives from '@/directives' //引入自定义指令
 import '@/icons' // icon
 import '@/permission' // permission control
-
+import * as filters from '@/filters' //引入过滤器
+import Components from '@/components/index'
+import checkPermission from '@/mixin/checkPermission'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -38,7 +40,17 @@ Object.keys(directives).forEach(key => {
   // 注册自定义指令
   Vue.directive(key, directives[key])
 })
+//注册自定义组件
+Vue.use(Components)
+//注册过滤器
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
+//全局混入检查对象
+Vue.mixin(checkPermission) //表示所有组件都拥有了一个检查按钮权限方法
 Vue.config.productionTip = false
+
+
 
 new Vue({
   el: '#app',

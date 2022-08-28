@@ -6,11 +6,16 @@ import {
 } from '@/utils/auth'
 import {
   login,
-  getInfo
+  getInfo,
+  getMens
 } from '@/api/user'
+import {
+  resetRouter
+} from '@/router'
 const state = {
   token: getToken(), //设置token为共享状态,初始vuex的时候从缓存中读取
-  userInfo: {} //定义一个空对象
+  userInfo: {}, //定义一个空对象
+  perInfo: []
 }
 const mutations = {
   setToken(state, token) {
@@ -24,13 +29,18 @@ const mutations = {
   },
   setUserInfo(state, result) {
     state.userInfo = {
-      ...result
+      ...result,
     }
   },
-  removeUserInfo(state) {
+  setPerInfo(state, mens) {
+    state.perInfo = [...mens]
+
+  },
+  removeUserInfo(state) { //清空用户信息
     state.userInfo = {}
-
-
+  },
+  removePer(state) { //清空权限信息
+    state.perInfo = []
   }
 }
 const actions = {
@@ -45,10 +55,32 @@ const actions = {
     context.commit('setUserInfo', result) //提交到mutations
     return result
   },
+  //获取权限
+  async getMens(context) {
+    const mens = await getMens()
+    let arr = []
+    for (let i in mens) {
+      arr.push(mens[i].code)
+    }
+    console.log(arr)
+    // const rows = mens.map(item => item.code)
+    // console.log(rows, 'getMens');
+    context.commit('setPerInfo', arr)
+    return arr
+  },
   //登出操作
   logout(context) {
     context.commit('removeToken'), //删除token
-      context.commit('removeUserInfo')
+      context.commit('removeUserInfo') //删除用户信息
+    context.commit('removePer') //删除权限路由
+    //重置路由
+    resetRouter()
+    //{root:true}调用根级的mutation或actions
+    context.commit('permission/setRouers', [], {
+      root: true
+    })
+
+
 
   }
 }

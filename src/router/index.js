@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import personal from './modules/personal'
 import departments from './modules/departments'
 import setting from './modules/setting'
+import staff from './modules/staff'
+import permission from './modules/permission'
 
 Vue.use(Router)
 
@@ -61,16 +63,14 @@ export const constantRoutes = [{
   },
 
   // 404 page must be placed at the end !!!
-  {
-    path: '*',
-    redirect: '/404',
-    hidden: true
-  }
+
 ]
 //创建动态路由
 export const asyncRoutes = [
+  staff,
   departments,
   personal,
+  permission,
   setting,
 ]
 const createRouter = () => new Router({
@@ -78,15 +78,14 @@ const createRouter = () => new Router({
   scrollBehavior: () => ({
     y: 0
   }),
-  routes: [...constantRoutes, ...asyncRoutes]
+  routes: [...constantRoutes]
 })
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
+  router.matcher = newRouter.matcher // 重新设置路由
 }
 
 export default router

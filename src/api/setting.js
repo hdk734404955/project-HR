@@ -42,3 +42,17 @@ export function addRole(data) {
     data
   })
 }
+//根据ID获取权限点
+export function rolePermission(id) {
+  return request({
+    url: `/role/permission?id=${id}`,
+  })
+}
+//给角色分配权限
+export function addPermission(data) {
+  return request({
+    url: '/role/add',
+    method: 'put',
+    data,
+  })
+}

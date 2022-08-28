@@ -13,13 +13,14 @@
                 size="small"
                 class="addbtn"
                 @click="showDialog = true"
+                :disabled="!checkPermission('add-role')"
                 >新增角色</el-button
               >
             </el-row>
             <el-table border="" :data="list">
               <!-- 表格内容 type="index" 把ID变为序号-->
               <el-table-column
-                prop="id"
+                type="index"
                 label="序号"
                 width="120"
                 align="center"
@@ -37,14 +38,24 @@
               ></el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="{ row }">
-                  <el-button type="success" size="small">分配权限</el-button
+                  <el-button
+                    type="success"
+                    size="small"
+                    @click="addPermission(row.id)"
+                    :disabled="!checkPermission('distribution-per')"
+                    >分配权限</el-button
                   ><el-button
                     type="primary"
                     size="small"
                     @click="editRole(row.id)"
+                    :disabled="!checkPermission('edit-role')"
                     >编辑</el-button
                   >
-                  <el-button type="danger" size="small" @click="delbtn(row.id)"
+                  <el-button
+                    type="danger"
+                    size="small"
+                    @click="delbtn(row.id)"
+                    :disabled="!checkPermission('del-role')"
                     >删除</el-button
                   >
                 </template>
@@ -53,9 +64,10 @@
             <!-- 分页组件 -->
             <el-row
               type="flex"
-              justify="end"
+              justify="center"
               align="middle"
               style="height: 60px"
+              class="row"
             >
               <el-pagination
                 :total="page.total"
@@ -142,6 +154,28 @@
         </el-col>
       </el-row></el-dialog
     >
+    <!-- 分配角色弹层 -->
+    <el-dialog title="分配权限" :visible="showPer" @close="cancel">
+      <!-- 树形结构 check-strictly="true"父子不相关 default-expand-all="true"默认展开树-->
+      <el-tree
+        :data="permData"
+        :props="defaultProps"
+        :show-checkbox="true"
+        :check-strictly="true"
+        node-key="id"
+        :default-checked-keys="selectCheck"
+        ref="permTree"
+      ></el-tree>
+      <!-- 按钮 -->
+      <el-row slot="footer" type="flex" justify="center">
+        <el-col :span="5">
+          <el-button size="small" @click="cancel">取消</el-button>
+          <el-button type="primary" size="small" @click="addPer"
+            >确定</el-button
+          >
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -152,7 +186,12 @@ import {
   getRoleone,
   updateRole,
   addRole,
+  addPermission,
+  rolePermission,
 } from "@/api/setting";
+import { getPermission } from "@/api/permission";
+import { toTree } from "@/utils/index";
+import { number } from "yargs";
 export default {
   computed: {
     showTitle() {
@@ -169,6 +208,13 @@ export default {
         pagesize: 6,
         total: 0,
       },
+      selectCheck: [], //用来记录当前权限点表示
+      roleId: null, //用来记录当前ID
+      permData: [], //接收权限数据
+      defaultProps: {
+        label: "name",
+      }, //定义显示字段名称
+      showPer: false, //分配权限弹层
       showDialog: false, //控制弹层显示
       roleForm: {
         name: "",
@@ -247,6 +293,30 @@ export default {
         this.showDialog = false;
       } catch (error) {}
     },
+    //分配角色
+    async addPermission(id) {
+      this.permData = toTree(await getPermission(), null); //获取所有权限点并且转化为树形结构
+      this.roleId = id;
+      const { permission } = await rolePermission(id); //根据ID获取权限点
+      this.selectCheck = permission.split(",");
+      // this.selectCheck = result.map((item) => item.per_id);
+      this.showPer = true;
+    },
+    //树形弹层取消按钮
+    cancel() {
+      this.selectCheck = [];
+      this.showPer = false;
+    },
+    //树形弹层确定按钮
+    async addPer() {
+      //调用树组件方法
+      await addPermission({
+        id: this.roleId,
+        perID: this.$refs.permTree.getCheckedKeys(),
+      });
+      this.$message.success("分配权限成功");
+      this.showPer = false;
+    },
   },
 };
 </script>
@@ -257,5 +327,8 @@ export default {
 }
 .addbtn {
   margin-top: 7px;
+}
+.row {
+  margin-top: 22px;
 }
 </style>

@@ -8,6 +8,7 @@ export function login(data) {
 
   })
 }
+//获取用户信息接口
 export function getInfo() {
   return request({
     url: '/info/getinfo',
@@ -16,7 +17,13 @@ export function getInfo() {
 
   })
 }
-
+//获取用户权限
+export function getMens() {
+  return request({
+    url: '/one',
+    method: 'get',
+  })
+}
 export function logout() {
   return request({
 
