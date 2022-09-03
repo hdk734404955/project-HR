@@ -8,7 +8,7 @@
             <img v-imgerr="defultImg" :src="headImg" />
           </div>
           <div class="headInfoTip">
-            <p class="firstChild">早安，{{ name }}，祝你开心每一天！</p>
+            <p class="firstChild">{{ head }}, {{ name }}, 祝你开心每一天！</p>
             <p class="lastChild">K集团 | {{ dept }}</p>
           </div>
         </div>
@@ -25,6 +25,7 @@
             <span>工作日历</span>
           </div>
           <!-- 放置日历组件 -->
+          <Calendar></Calendar>
         </el-card>
         <!-- 公告 -->
         <el-card class="box-card">
@@ -32,7 +33,7 @@
             <div class="title">公告</div>
             <div class="contentItem">
               <ul class="noticeList">
-                <li>
+                <!-- <li>
                   <div class="item">
                     <img src="@/assets/common/img.jpeg" alt="" />
                     <div>
@@ -43,31 +44,7 @@
                       <p>2018-07-21 15:21:38</p>
                     </div>
                   </div>
-                </li>
-                <li>
-                  <div class="item">
-                    <img src="@/assets/common/img.jpeg" alt="" />
-                    <div>
-                      <p>
-                        <span class="col">朱继柳</span> 发布了
-                        第2期“传智大讲堂”互动讨论获奖名单公布
-                      </p>
-                      <p>2018-07-21 15:21:38</p>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="item">
-                    <img src="@/assets/common/img.jpeg" alt="" />
-                    <div>
-                      <p>
-                        <span class="col">朱继柳</span> 发布了
-                        第3期“传智大讲堂”互动讨论获奖名单公布
-                      </p>
-                      <p>2018-07-21 15:21:38</p>
-                    </div>
-                  </div>
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>
@@ -77,7 +54,7 @@
       <el-col :span="11">
         <el-card class="box-card">
           <div class="header headTit">
-            <span>流程申请</span>
+            <span>便捷导航</span>
           </div>
           <div class="sideNav">
             <el-button class="sideBtn">加班离职</el-button>
@@ -129,6 +106,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Calendar from "./components/calendar.vue";
 
 export default {
   name: "Dashboard",
@@ -139,7 +117,11 @@ export default {
   },
   computed: {
     ...mapGetters(["name", "headImg", "dept"]),
+    head() {
+      return "早安";
+    },
   },
+  components: { Calendar },
 };
 </script>
 

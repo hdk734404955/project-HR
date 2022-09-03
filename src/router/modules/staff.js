@@ -16,6 +16,7 @@ export default {
     }
   }, {
     path: 'info/:id',
+    // path: 'info',
     component: () => import('@/views/staff/info'),
     hidden: true,
     meta: {

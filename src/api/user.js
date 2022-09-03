@@ -20,12 +20,39 @@ export function getInfo() {
 //获取用户权限
 export function getMens() {
   return request({
-    url: '/one',
+    url: '/user/per',
     method: 'get',
   })
 }
-export function logout() {
+//获取用户详细信息
+export function getUser(id) {
   return request({
+    url: `/user/info?user_id=${id}`
+  })
+}
+//更换用户头像
+export function userImg(data) {
+  return request({
+    url: `/user/headimg?id=${data.id}`,
+    method: 'post',
+    data
+  })
+}
+//修改个人信息
+export function upUserInfo(data) {
+  return request({
+    url: `/user/info?user_id=${data.id}`,
+    method: 'put',
+    data
+
+  })
+}
+//修改密码
+export function delPass(data) {
+  return request({
+    url: `/user/password`,
+    method: 'post',
+    data
 
   })
 }
