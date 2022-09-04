@@ -5,6 +5,8 @@ import departments from './modules/departments'
 import setting from './modules/setting'
 import staff from './modules/staff'
 import permission from './modules/permission'
+import approval from './modules/approval'
+import statistic from './modules/statistic'
 
 Vue.use(Router)
 
@@ -61,16 +63,31 @@ export const constantRoutes = [{
       }
     }]
   },
+  {
+    path: '/leave',
+    component: Layout,
+    children: [{
+      path: '',
+      name: 'leave',
+      component: () => import('@/views/leave/index'),
+      meta: {
+        title: '请假调休',
+        icon: 'form'
+      }
+    }]
+  }
 
-  // 404 page must be placed at the end !!!
 
 ]
 //创建动态路由
 export const asyncRoutes = [
+
   staff,
+  approval,
   departments,
   personal,
   permission,
+  statistic,
   setting,
 ]
 const createRouter = () => new Router({

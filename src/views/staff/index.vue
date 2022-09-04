@@ -11,7 +11,12 @@
       <!-- 表格和分页 -->
       <el-card>
         <el-table border v-loading="loading" :data="list">
-          <el-table-column label="序号" align="center" type="index" />
+          <el-table-column
+            label="序号"
+            align="center"
+            type="index"
+            width="80"
+          />
           <el-table-column label="头像" align="center" prop="head_img">
             <template slot-scope="scope">
               <el-image
