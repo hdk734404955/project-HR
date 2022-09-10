@@ -67,9 +67,9 @@
         <!-- 绩效指数 -->
         <el-card class="box-card">
           <div slot="header" class="header">
-            <span>绩效指数</span>
+            <span>备忘录</span>
           </div>
-          <!-- 放置雷达图 -->
+          <!-- <todos></todos> -->
         </el-card>
         <!-- 帮助连接 -->
         <el-card class="box-card">

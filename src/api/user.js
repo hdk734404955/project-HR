@@ -8,6 +8,24 @@ export function login(data) {
 
   })
 }
+//注册接口
+export function register(data) {
+  return request({
+    url: '/user/register',
+    method: 'post',
+    data
+
+  })
+}
+//验证账号是否存在接口
+export function isOK(data) {
+  return request({
+    url: '/user/isOK',
+    method: 'post',
+    data
+
+  })
+}
 //获取用户信息接口
 export function getInfo() {
   return request({

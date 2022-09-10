@@ -4,14 +4,14 @@ import store from '@/store' // 引入vuex store实例
 import NProgress from 'nprogress' // 引入一份进度条插件
 import 'nprogress/nprogress.css' // 引入进度条样式
 
-const whiteList = ['/404', '/login']
+const whiteList = ['/404', '/login', '/register'] //路由白名单
 
 //前置守卫
 router.beforeEach(async (to, from, next) => {
   NProgress.start() //开启进度条
   if (store.getters.token) {
     //如果存在token
-    if (to.path === '/login') {
+    if (to.path === '/login' || to.path === '/register') {
 
       next('/')
 

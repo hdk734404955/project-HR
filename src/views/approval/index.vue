@@ -17,7 +17,12 @@
       </page-tools>
       <!-- 放置内容 -->
       <el-card>
-        <el-table :data="approvalList" border style="width: 100%">
+        <el-table
+          :data="approvalList"
+          border
+          style="width: 100%"
+          v-loading="loading"
+        >
           <el-table-column label="序号" align="center" type="index" width="100">
           </el-table-column>
           <el-table-column prop="u_id" label="工号" align="center" width="120">
@@ -93,6 +98,7 @@ export default {
         pagesize: 6,
         total: 0,
       },
+      loading: false,
       checked: false,
       checked1: false,
       checked2: false,
@@ -123,9 +129,11 @@ export default {
     },
     //获取请假列表
     async getLeave() {
+      this.loading = true;
       const { rows, total } = await getLeave(this.page);
       this.approvalList = rows;
       this.page.total = total;
+      this.loading = false;
     },
     //获取审批人信息
     async getInfo() {
