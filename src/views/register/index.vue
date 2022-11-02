@@ -91,6 +91,9 @@
         @click.native.prevent="handleRegister"
         >注册</el-button
       >
+      <div class="tips">
+        <span>已有账号?<router-link to="/login">去登录</router-link></span>
+      </div>
     </el-form>
   </div>
 </template>

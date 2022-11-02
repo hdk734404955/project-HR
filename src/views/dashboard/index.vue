@@ -27,7 +27,23 @@
           <!-- 放置日历组件 -->
           <Calendar></Calendar>
         </el-card>
-        <!-- 公告 -->
+       
+      </el-col>
+      <!-- 右侧内容 -->
+      <el-col :span="11">
+        <el-card class="box-card">
+          <div class="header headTit">
+            <span>便捷导航</span>
+          </div>
+          <div class="sideNav">
+            <el-button class="sideBtn">加班离职</el-button>
+            <el-button class="sideBtn">请假调休</el-button>
+            <el-button class="sideBtn">审批列表</el-button>
+            <el-button class="sideBtn">我的信息</el-button>
+          </div>
+        </el-card>
+
+       <!-- 公告 -->
         <el-card class="box-card">
           <div class="advContent">
             <div class="title">公告</div>
@@ -49,30 +65,14 @@
             </div>
           </div>
         </el-card>
-      </el-col>
-      <!-- 右侧内容 -->
-      <el-col :span="11">
-        <el-card class="box-card">
-          <div class="header headTit">
-            <span>便捷导航</span>
-          </div>
-          <div class="sideNav">
-            <el-button class="sideBtn">加班离职</el-button>
-            <el-button class="sideBtn">请假调休</el-button>
-            <el-button class="sideBtn">审批列表</el-button>
-            <el-button class="sideBtn">我的信息</el-button>
-          </div>
-        </el-card>
-
         <!-- 绩效指数 -->
-        <el-card class="box-card">
+        <!-- <el-card class="box-card">
           <div slot="header" class="header">
             <span>备忘录</span>
           </div>
-          <!-- <todos></todos> -->
-        </el-card>
+        </el-card> -->
         <!-- 帮助连接 -->
-        <el-card class="box-card">
+        <!-- <el-card class="box-card">
           <div class="header headTit">
             <span>帮助链接</span>
           </div>
@@ -98,7 +98,7 @@
               </el-col>
             </el-row>
           </div>
-        </el-card>
+        </el-card> -->
       </el-col>
     </el-row>
   </div>

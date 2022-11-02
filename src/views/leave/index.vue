@@ -5,7 +5,13 @@
         <span slot="before">共{{ this.page.total }}条记录</span>
         <template slot="after">
           <el-button size="small" type="primary" @click="addL"
-            >新增请假</el-button
+            >请假申请</el-button
+          >
+          <el-button size="small" type="success" @click="addTimes"
+            >加班申请</el-button
+          >
+          <el-button size="small" type="danger" @click="dimission"
+            >离职申请</el-button
           >
         </template>
       </page-tools>
@@ -15,14 +21,16 @@
           </el-table-column>
           <el-table-column prop="u_id" label="工号" align="center" width="120">
           </el-table-column>
-          <el-table-column prop="name" label="请假人" align="center">
+          <el-table-column prop="name" label="申请人" align="center">
           </el-table-column>
           <el-table-column prop="approval" label="审批人" align="center">
           </el-table-column>
-          <el-table-column prop="starttime" label="请假时间" align="center">
+          <el-table-column prop="starttime" label="申请时间" align="center">
             <template v-slot="{ row }">
               {{ row.starttime | formatDate }}</template
             >
+          </el-table-column>
+          <el-table-column prop="type" label="类型" align="center">
           </el-table-column>
           <el-table-column prop="state" label="状态" align="center">
             <template v-slot="{ row }">
@@ -82,6 +90,13 @@
             v-model="userForm.name"
           ></el-input>
         </el-form-item>
+        <el-form-item label="类型">
+          <el-input
+            style="width: 220px"
+            disabled
+            v-model="userForm.type"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="开始时间" prop="starttime">
           <el-date-picker
             type="datetime"
@@ -111,6 +126,110 @@
         <el-button type="primary" @click="sumbit">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 加班弹层 -->
+    <el-dialog title="加班" :visible.sync="addTime" @close="cancel">
+      <el-form
+        :model="userForm"
+        label-position="right"
+        label-width="80px"
+        class="table"
+        :rules="rules"
+        ref="userForm"
+      >
+        <el-form-item label="工号">
+          <el-input
+            style="width: 220px"
+            disabled
+            v-model="userForm.id"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="姓名">
+          <el-input
+            style="width: 220px"
+            disabled
+            v-model="userForm.name"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-input
+            style="width: 220px"
+            disabled
+            v-model="userForm.type"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="开始时间" prop="starttime">
+          <el-date-picker
+            type="datetime"
+            placeholder="选择开始时间"
+            v-model="userForm.starttime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="结束时间" prop="endtime">
+          <el-date-picker
+            type="datetime"
+            placeholder="选择结束时间"
+            v-model="userForm.endtime"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="加班理由" prop="content">
+          <el-input
+            type="textarea"
+            v-model="userForm.content"
+            style="width: 220px"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="sumbit">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 离职弹层组件 -->
+    <el-dialog title="离职" :visible.sync="isDimission" @close="cancel">
+      <el-form
+        :model="userForm"
+        label-position="right"
+        label-width="80px"
+        class="table"
+        :rules="rules"
+        ref="userForm"
+      >
+        <el-form-item label="工号">
+          <el-input
+            style="width: 220px"
+            disabled
+            v-model="userForm.id"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="姓名">
+          <el-input
+            style="width: 220px"
+            disabled
+            v-model="userForm.name"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-input
+            style="width: 220px"
+            disabled
+            v-model="userForm.type"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="离职理由" prop="content">
+          <el-input
+            type="textarea"
+            v-model="userForm.content"
+            style="width: 220px"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="sumbit">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -127,8 +246,12 @@ export default {
         starttime: "",
         endtime: "",
         content: "",
+        type: "",
       },
       dialogFormVisible: false, //弹层显示
+      //加班弹层控制
+      addTime: false,
+      isDimission: false, //离职弹层组件控制
       //请假列表
       leaveList: [],
       //分页
@@ -186,19 +309,37 @@ export default {
         await this.$refs.userForm.validate(); //等待表单校验通过
         await addLeave(this.userForm);
         this.dialogFormVisible = false;
-        this.$message.success("请假申请提交成功");
+        this.addTime = false;
+        this.isDimission = false;
+        this.$message.success("提交成功");
         this.getLeaveInfo();
       } catch (error) {}
     },
     //新增请假菜单
     addL() {
+      this.userForm = { ...this.userForm, type: "请假" };
+      // this.userForm.type="请假"
       this.dialogFormVisible = true;
+    },
+    //加班申请
+    addTimes() {
+      this.userForm = { ...this.userForm, type: "加班" };
+      // this.userForm.type="加班"
+      this.addTime = true;
+    },
+    //离职申请
+    dimission() {
+      this.userForm = { ...this.userForm, type: "离职" };
+      // this.userForm.type="加班"
+      this.isDimission = true;
     },
     //取消按钮
     cancel() {
       //移除校验规则
       this.$refs.userForm.resetFields();
       this.dialogFormVisible = false;
+      this.addTime = false;
+      this.isDimission = false;
     },
     //撤销按钮
     async repeal(id) {

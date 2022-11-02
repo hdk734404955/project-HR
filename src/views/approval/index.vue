@@ -27,14 +27,16 @@
           </el-table-column>
           <el-table-column prop="u_id" label="工号" align="center" width="120">
           </el-table-column>
-          <el-table-column prop="name" label="请假人" align="center">
+          <el-table-column prop="name" label="申请人" align="center">
           </el-table-column>
           <el-table-column prop="approval" label="审批人" align="center">
           </el-table-column>
-          <el-table-column prop="starttime" label="请假时间" align="center">
+          <el-table-column prop="starttime" label="申请时间" align="center">
             <template v-slot="{ row }">
               {{ row.starttime | formatDate }}</template
             >
+          </el-table-column>
+          <el-table-column prop="type" label="类型" align="center">
           </el-table-column>
           <el-table-column prop="state" label="状态" align="center">
             <template v-slot="{ row }">

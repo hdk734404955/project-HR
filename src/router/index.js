@@ -1,17 +1,17 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import personal from './modules/personal'
-import departments from './modules/departments'
-import setting from './modules/setting'
-import staff from './modules/staff'
-import permission from './modules/permission'
-import approval from './modules/approval'
-import statistic from './modules/statistic'
+import Vue from "vue";
+import Router from "vue-router";
+import personal from "./modules/personal";
+import departments from "./modules/departments";
+import setting from "./modules/setting";
+import staff from "./modules/staff";
+import permission from "./modules/permission";
+import approval from "./modules/approval";
+import statistic from "./modules/statistic";
 
-Vue.use(Router)
+Vue.use(Router);
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from "@/layout";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -37,55 +37,88 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [{
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+export const constantRoutes = [
+  {
+    path: "/login",
+    component: () => import("@/views/login/index"),
+    hidden: true,
   },
   {
-    path: '/register',
-    component: () => import('@/views/register/index'),
-    hidden: true
+    path: "/register",
+    component: () => import("@/views/register/index"),
+    hidden: true,
   },
   {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
+    path: "/404",
+    component: () => import("@/views/404"),
+    hidden: true,
   },
 
   {
-    path: '/',
+    path: "/",
     component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: {
-        title: '首页',
-        icon: 'dashboard'
-      }
-    }]
+    redirect: "/dashboard",
+    children: [
+      {
+        path: "dashboard",
+        name: "Dashboard",
+        component: () => import("@/views/dashboard/index"),
+        meta: {
+          title: "首页",
+          icon: "dashboard",
+        },
+      },
+    ],
   },
   {
-    path: '/leave',
+    path: "/leave",
     component: Layout,
-    children: [{
-      path: '',
-      name: 'leave',
-      component: () => import('@/views/leave/index'),
-      meta: {
-        title: '请假调休',
-        icon: 'form'
-      }
-    }]
-  }
-
-
-]
+    children: [
+      {
+        path: "",
+        name: "leave",
+        component: () => import("@/views/leave/index"),
+        meta: {
+          title: "请假调休",
+          icon: "form",
+        },
+      },
+    ],
+  },
+  {
+    path: "/attendance",
+    component: Layout,
+    children: [
+      {
+        path: "",
+        name: "attendance",
+        component: () => import("@/views/attendance/index"),
+        meta: {
+          title: "考勤打卡",
+          icon: "clipboard",
+        },
+      },
+    ],
+  },
+  {
+    path: "/study",
+    component: Layout,
+    name: "Study",
+    children: [
+      {
+        path: "",
+        name: "Learn",
+        component: () => import("@/views/study/index"),
+        meta: {
+          title: "学习培训",
+          icon: "education",
+        },
+      },
+    ],
+  },
+];
 //创建动态路由
 export const asyncRoutes = [
-
   staff,
   approval,
   departments,
@@ -93,20 +126,21 @@ export const asyncRoutes = [
   permission,
   statistic,
   setting,
-]
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({
-    y: 0
-  }),
-  routes: [...constantRoutes]
-})
+];
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({
+      y: 0,
+    }),
+    routes: [...constantRoutes],
+  });
 
-const router = createRouter()
+const router = createRouter();
 
 export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // 重新设置路由
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // 重新设置路由
 }
 
-export default router
+export default router;

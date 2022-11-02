@@ -59,6 +59,10 @@ export default {
     async logout() {
       //登出操作
       await this.$store.dispatch("user/logout");
+      this.$message.success({
+        message: "退出成功",
+        duration: 1000,
+      });
       this.$router.push("/login");
     },
   },

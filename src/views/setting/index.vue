@@ -191,7 +191,6 @@ import {
 } from "@/api/setting";
 import { getPermission } from "@/api/permission";
 import { toTree } from "@/utils/index";
-import { number } from "yargs";
 export default {
   computed: {
     showTitle() {

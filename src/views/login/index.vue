@@ -126,6 +126,10 @@ export default {
           this.loading = true;
           if (isOK) {
             await this["user/login"](this.loginForm);
+            this.$message.success({
+              message: "登录成功",
+              duration: 1000,
+            });
             this.$router.push("/");
           }
         } catch (error) {
