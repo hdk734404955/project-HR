@@ -103,11 +103,10 @@ export const constantRoutes = [
   {
     path: "/study",
     component: Layout,
-    name: "Study",
     children: [
       {
         path: "",
-        name: "Learn",
+        name: "study",
         component: () => import("@/views/study/index"),
         meta: {
           title: "学习培训",
