@@ -5,14 +5,12 @@
       <page-tools :show-before="true">
         <span slot="before">共{{ this.page.total }}条记录</span>
         <template slot="after">
-          <el-checkbox v-model="checked" @change="Checked">待审批</el-checkbox>
-          <el-checkbox v-model="checked1" @change="Checked1"
-            >已同意</el-checkbox
-          >
-          <el-checkbox v-model="checked2" @change="Checked2"
-            >已拒绝</el-checkbox
-          >
-          <el-checkbox v-model="checked3" @change="Checked3">撤销</el-checkbox>
+          <el-checkbox-group v-model="checkList" @change="selectData">
+            <el-checkbox :label="0">待审批</el-checkbox>
+            <el-checkbox :label="1">已同意</el-checkbox>
+            <el-checkbox :label="2">已拒绝</el-checkbox>
+            <el-checkbox :label="3">撤销</el-checkbox>
+          </el-checkbox-group>
         </template>
       </page-tools>
       <!-- 放置内容 -->
@@ -31,12 +29,12 @@
           </el-table-column>
           <el-table-column prop="approval" label="审批人" align="center">
           </el-table-column>
-          <el-table-column prop="starttime" label="申请时间" align="center">
-            <template v-slot="{ row }">
-              {{ row.starttime | formatDate }}</template
-            >
+          <el-table-column prop="firsttime" label="申请时间" align="center">
           </el-table-column>
           <el-table-column prop="type" label="类型" align="center">
+            <template v-slot="{ row }">
+              {{ row.type | typeFilter }}
+            </template>
           </el-table-column>
           <el-table-column prop="state" label="状态" align="center">
             <template v-slot="{ row }">
@@ -47,11 +45,25 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="200">
             <template v-slot="{ row }">
-              <el-button type="text" size="small">查看</el-button>
-              <el-button type="text" size="small" @click="agree(row.l_id)"
+              <el-button
+                type="text"
+                size="small"
+                @click="select(row.l_id)"
+                :disabled="!checkPermission('app-select')"
+                >查看</el-button
+              >
+              <el-button
+                type="text"
+                size="small"
+                @click="agree(row.l_id)"
+                :disabled="!checkPermission('agree')"
                 >同意</el-button
               >
-              <el-button type="text" size="small" @click="refuse(row.l_id)"
+              <el-button
+                type="text"
+                size="small"
+                @click="refuse(row.l_id)"
+                :disabled="!checkPermission('refuse')"
                 >拒绝</el-button
               >
             </template>
@@ -78,16 +90,14 @@
   </div>
 </template>
 <script>
+import typeList from "@/views/leave/type";
 import { getLeave } from "@/api/leave";
 import format from "@/api/constant/staff";
 import {
   getApproval,
   Approval,
   refuseApproval,
-  approvalWait,
-  approvalAgree,
-  approvalRefuse,
-  approvalRepeal,
+  selectApprovalApi,
 } from "@/api/approval";
 import { getInfo } from "@/api/user";
 export default {
@@ -100,11 +110,8 @@ export default {
         pagesize: 6,
         total: 0,
       },
+      checkList: [],
       loading: false,
-      checked: false,
-      checked1: false,
-      checked2: false,
-      checked3: false,
       approvalInfo: {},
     };
   },
@@ -118,6 +125,10 @@ export default {
       const obj = format.colorType.find((item) => item.id === val);
       return obj ? obj.value : "未知";
     },
+    typeFilter(val) {
+      const obj = typeList.typeList.find((item) => item.value === val);
+      return obj ? obj.label : "未知";
+    },
   },
   created() {
     this.getInfo();
@@ -128,6 +139,10 @@ export default {
     changePage(newPage) {
       this.page.page = newPage;
       this.getLeave();
+    },
+    //查看
+    select(id) {
+      this.$router.push(`/leave/info/${id}`);
     },
     //获取请假列表
     async getLeave() {
@@ -176,46 +191,29 @@ export default {
         this.$message.warning("员工撤销请假无法操作");
       }
     },
-    //待审批多选框
-    async Checked() {
-      if (this.checked) {
-        const { rows, total } = await approvalWait(this.page);
-        this.page.total = total;
+    //筛选
+    async selectData() {
+      if (this.checkList.length > 0) {
+        const { rows, total } = await selectApprovalApi({
+          page: this.page,
+          list: this.checkList,
+        });
         this.approvalList = rows;
+        this.page.total = total;
       } else {
         this.getLeave();
       }
     },
-    //已同意多选框
-    async Checked1() {
-      if (this.checked1) {
-        const { rows, total } = await approvalAgree(this.page);
-        this.page.total = total;
-        this.approvalList = rows;
-      } else {
-        this.getLeave();
-      }
-    },
-    //已拒绝多选框
-    async Checked2() {
-      if (this.checked2) {
-        const { rows, total } = await approvalRefuse(this.page);
-        this.page.total = total;
-        this.approvalList = rows;
-      } else {
-        this.getLeave();
-      }
-    },
-    //撤销多选框
-    async Checked3() {
-      if (this.checked3) {
-        const { rows, total } = await approvalRepeal(this.page);
-        this.page.total = total;
-        this.approvalList = rows;
-      } else {
-        this.getLeave();
-      }
-    },
+    // //待审批多选框
+    // async Checked() {
+    //   if (this.checked) {
+    //     const { rows, total } = await approvalWait(this.page);
+    //     this.page.total = total;
+    //     this.approvalList = rows;
+    //   } else {
+    //     this.getLeave();
+    //   }
+    // },
   },
 };
 </script>

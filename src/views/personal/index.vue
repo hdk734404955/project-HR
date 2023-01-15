@@ -220,6 +220,9 @@
               </el-form-item>
             </el-form></el-tab-pane
           >
+          <el-tab-pane label="我要留言" name="four"
+            ><leave-message></leave-message>
+          </el-tab-pane>
         </el-tabs>
       </el-card>
     </div>
@@ -228,6 +231,7 @@
 <script>
 import { getInfo, userImg, getUser, upUserInfo, delPass } from "@/api/user";
 import ImageUpload from "@/components/ImageUpload/index.vue";
+import LeaveMessage from "./leaveMessage.vue";
 export default {
   data() {
     //密码校验规则
@@ -366,7 +370,7 @@ export default {
     },
   },
 
-  components: { ImageUpload },
+  components: { ImageUpload, LeaveMessage },
 };
 </script>
 <style scoped>

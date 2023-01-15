@@ -27,6 +27,10 @@ export default {
       id: 3,
       value: "撤销",
     },
+    {
+      id: 4,
+      value: "审核中",
+    },
   ],
   colorType: [
     {
@@ -44,6 +48,10 @@ export default {
     {
       id: 3,
       value: "info",
+    },
+    {
+      id: 4,
+      value: "success",
     },
   ],
   checkType: [
@@ -64,6 +72,45 @@ export default {
     {
       id: 1,
       value: "success",
+    },
+  ],
+  cryptonym: [
+    {
+      id: 0,
+      value: "否",
+    },
+    {
+      id: 1,
+      value: "是",
+    },
+  ],
+  stepOne: [
+    {
+      id: 0,
+      value: "wait",
+      text: "待审核",
+    },
+    {
+      id: 4,
+      value: "wait",
+      text: "审核中",
+    },
+  ],
+  stepTwo: [
+    {
+      id: 1,
+      value: "success",
+      text: "通过",
+    },
+    {
+      id: 2,
+      value: "error",
+      text: "拒绝",
+    },
+    {
+      id: 3,
+      value: "wait",
+      text: "撤销",
     },
   ],
 };

@@ -56,8 +56,8 @@ export default {
 
 <style scope>
 .pie {
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 400px;
   /* background-color: aqua; */
 }
 </style>

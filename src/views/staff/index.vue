@@ -25,10 +25,22 @@
               ></el-image>
             </template>
           </el-table-column>
+          <el-table-column
+            label="账号"
+            align="center"
+            prop="username"
+            width="120"
+            :show-overflow-tooltip="true"
+          />
           <el-table-column label="姓名" align="center" prop="name" />
           <el-table-column label="工号" align="center" prop="id" />
           <el-table-column label="部门" align="center" prop="department" />
-          <el-table-column label="入职时间" align="center" prop="time">
+          <el-table-column
+            label="入职时间"
+            align="center"
+            prop="time"
+            width="120"
+          >
             <!-- 利用过滤器格式化时间格式 -->
             <template v-slot="{ row }"> {{ row.time | formatDate }}</template>
           </el-table-column>
@@ -38,12 +50,20 @@
             prop="state"
             :formatter="format"
           />
-          <el-table-column
-            label="操作"
-            fixed="right"
-            width="280"
-            align="center"
-          >
+          <el-table-column label="账号状态" align="center" prop="" width="140">
+            <template slot-scope="{ row }">
+              <el-switch
+                v-model="row.account"
+                active-text="启用"
+                inactive-text="禁用"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @change="setSwitch({ id: row.id, account: row.account })"
+              >
+              </el-switch
+            ></template>
+          </el-table-column>
+          <el-table-column label="操作" width="240" align="center">
             <template slot-scope="{ row }">
               <el-button
                 type="text"
@@ -80,13 +100,13 @@
                 :disabled="!checkPermission('role-staff')"
                 >角色</el-button
               >
-              <el-button
+              <!-- <el-button
                 type="text"
                 size="small"
                 @click="delStaff(row.id)"
                 :disabled="!checkPermission('expel-staff')"
                 >开除</el-button
-              >
+              > -->
             </template>
           </el-table-column>
         </el-table>
@@ -176,6 +196,7 @@ import {
   getStaffone,
   staffPost,
   putstaff,
+  setAccount,
 } from "@/api/staff";
 import format from "@/api/constant/staff";
 import AddRole from "./components/add-role.vue";
@@ -195,6 +216,7 @@ export default {
         total: 0,
       },
       tree: [],
+      value: 1,
       //表单数据
       formData: {
         id: "",
@@ -237,6 +259,9 @@ export default {
       //调用接口
       this.loading = true; //打开进度条
       const { total, rows } = await getStaff(this.page);
+      rows.forEach((item) => {
+        item.account = Boolean(item.account);
+      });
       this.page.total = total;
       this.list = rows;
       this.loading = false; //关闭进度条
@@ -285,6 +310,14 @@ export default {
       } else {
         this.$message.warning("已是正式员工,无需转正");
       }
+    },
+    //禁用账号
+    async setSwitch(data) {
+      await setAccount(data);
+      this.$message.success({
+        message: "操作成功",
+        duration: 1000,
+      });
     },
     //查看员工详情
     selectInfo(id) {

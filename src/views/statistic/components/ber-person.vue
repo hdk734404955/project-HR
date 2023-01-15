@@ -51,8 +51,8 @@ export default {
 
 <style scope>
 .ber {
-  width: 500px;
-  height: 500px;
+  width: 400px;
+  height: 400px;
   /* background-color: aqua; */
 }
 </style>

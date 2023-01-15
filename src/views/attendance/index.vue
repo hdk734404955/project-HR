@@ -26,6 +26,8 @@
           </el-table-column>
           <el-table-column prop="time" label="打卡时间" align="center">
           </el-table-column>
+          <el-table-column prop="place" label="打卡地点" align="center">
+          </el-table-column>
           <el-table-column prop="type" label="状态" align="center">
             <template v-slot="{ row }">
               <el-tag :type="row.type | colorType">{{
@@ -115,7 +117,7 @@ export default {
       //分页
       page: {
         page: 1,
-        pagesize: 6,
+        pagesize: 4,
         total: 0,
       },
       list: [],

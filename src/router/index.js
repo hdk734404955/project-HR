@@ -7,6 +7,7 @@ import staff from "./modules/staff";
 import permission from "./modules/permission";
 import approval from "./modules/approval";
 import statistic from "./modules/statistic";
+import proclamation from "./modules/proclamation";
 
 Vue.use(Router);
 
@@ -79,8 +80,16 @@ export const constantRoutes = [
         name: "leave",
         component: () => import("@/views/leave/index"),
         meta: {
-          title: "请假调休",
+          title: "申请中心",
           icon: "form",
+        },
+      },
+      {
+        path: "info/:id",
+        hidden: true,
+        component: () => import("@/views/leave/info.vue"),
+        meta: {
+          title: "请假信息",
         },
       },
     ],
@@ -125,6 +134,7 @@ export const asyncRoutes = [
   permission,
   statistic,
   setting,
+  proclamation,
 ];
 const createRouter = () =>
   new Router({

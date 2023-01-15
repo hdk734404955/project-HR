@@ -4,7 +4,7 @@
       <!-- 放置内容 -->
       <el-card>
         <el-tabs>
-          <el-tab-pane label="角色管理">
+          <el-tab-pane label="角色管理" v-if="checkPermission('role-manger')">
             <!-- 左侧内容 -->
             <el-row style="height: 60px">
               <el-button
@@ -77,6 +77,9 @@
                 layout="prev,pager,next"
               ></el-pagination>
             </el-row>
+          </el-tab-pane>
+          <el-tab-pane label="题库管理" v-if="checkPermission('test-manger')">
+            <test-manger></test-manger>
           </el-tab-pane>
           <el-tab-pane label="公司信息">
             <el-alert
@@ -191,7 +194,9 @@ import {
 } from "@/api/setting";
 import { getPermission } from "@/api/permission";
 import { toTree } from "@/utils/index";
+import testManger from "./components/testManger.vue";
 export default {
+  components: { testManger },
   computed: {
     showTitle() {
       return this.roleForm.id ? "编辑部门" : "新增部门";

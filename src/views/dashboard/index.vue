@@ -27,11 +27,11 @@
           <!-- 放置日历组件 -->
           <Calendar></Calendar>
         </el-card>
-       
       </el-col>
       <!-- 右侧内容 -->
       <el-col :span="11">
-        <el-card class="box-card">
+        <!-- 快捷导航 -->
+        <!-- <el-card class="box-card">
           <div class="header headTit">
             <span>便捷导航</span>
           </div>
@@ -41,29 +41,52 @@
             <el-button class="sideBtn">审批列表</el-button>
             <el-button class="sideBtn">我的信息</el-button>
           </div>
-        </el-card>
+        </el-card> -->
 
-       <!-- 公告 -->
+        <!-- 公告 -->
         <el-card class="box-card">
           <div class="advContent">
             <div class="title">公告</div>
             <div class="contentItem">
               <ul class="noticeList">
-                <!-- <li>
+                <li
+                  class="listyle"
+                  v-for="item in list"
+                  :key="item.id"
+                  @click="select(item.id)"
+                >
                   <div class="item">
                     <img src="@/assets/common/img.jpeg" alt="" />
                     <div>
                       <p>
-                        <span class="col">朱继柳</span> 发布了
-                        第1期“传智大讲堂”互动讨论获奖名单公布
+                        <span class="col">{{ item.name }}</span> 发布了
+                        {{ item.title }} ------
+                        <span>{{ item.time }}</span>
                       </p>
-                      <p>2018-07-21 15:21:38</p>
+
+                      <!-- <p>{{ item.time }}</p> -->
                     </div>
                   </div>
-                </li> -->
+                </li>
               </ul>
             </div>
           </div>
+          <!-- 分页组件 -->
+          <el-row
+            type="flex"
+            justify="center"
+            align="middle"
+            style="height: 60px"
+            class="row"
+          >
+            <el-pagination
+              :current-page="page.page"
+              :page-size="page.pagesize"
+              :total="page.total"
+              @current-change="changePage"
+              layout="prev, pager, next"
+            />
+          </el-row>
         </el-card>
         <!-- 绩效指数 -->
         <!-- <el-card class="box-card">
@@ -105,6 +128,7 @@
 </template>
 
 <script>
+import { getAllAffiche } from "@/api/affiche";
 import { mapGetters } from "vuex";
 import Calendar from "./components/calendar.vue";
 
@@ -113,15 +137,51 @@ export default {
   data() {
     return {
       defultImg: require("@/assets/common/bigUserHeader.png"),
+      list: [],
+      //分页
+      page: {
+        page: 1,
+        pagesize: 4,
+        total: 0,
+      },
     };
   },
   computed: {
     ...mapGetters(["name", "headImg", "dept"]),
     head() {
-      return "早安";
+      if (this.getTime() < 11 && this.getTime() >= 5) {
+        return "早上好";
+      } else if (this.getTime() <= 17 && this.getTime() >= 11) {
+        return "中午好";
+      } else {
+        return "晚上好";
+      }
     },
   },
   components: { Calendar },
+  created() {
+    this.getAllAffiche();
+  },
+  methods: {
+    //换页
+    changePage(newPage) {
+      this.page.page = newPage;
+      this.getAllAffiche();
+    },
+    async getAllAffiche() {
+      const { rows, total } = await getAllAffiche(this.page);
+      this.list = rows;
+      this.page.total = total;
+    },
+    select(id) {
+      this.$router.push(`/proclamation/info?id=${id}`);
+    },
+    //获取时间
+    getTime() {
+      const date = new Date();
+      return date.getHours();
+    },
+  },
 };
 </script>
 
@@ -253,5 +313,11 @@ export default {
   .iconTechnology {
     background-position: -460px 0;
   }
+}
+.row {
+  margin-top: 52.5px;
+}
+.listyle {
+  cursor: pointer;
 }
 </style>
